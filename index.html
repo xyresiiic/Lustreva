@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lustréva — Thoughtful Gifts, Beautiful Moments</title>
+  <meta name="description" content="Lustréva — Premium gifting brand. Discover curated luxury gifts for every occasion." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="page-loader">
+  <div class="loader-inner">
+    <div class="loader-logo">
+      <svg width="44" height="44" viewBox="0 0 40 40" fill="none">
+        <path d="M20 3L23.5 13.5H34L25.75 19.5L29.25 30L20 24L10.75 30L14.25 19.5L6 13.5H16.5L20 3Z" fill="#c9a96e"/>
+      </svg>
+    </div>
+    <div class="loader-brand">Lustréva</div>
+    <div class="loader-tagline">Crafting Moments Worth Remembering</div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast-container" aria-live="polite"></div>
+
+<!-- NAVBAR -->
+<header id="navbar">
+  <div class="nav-announcement">
+    <span>✦ Free gift wrapping on all orders &nbsp;·&nbsp; Use <strong>LUSTREVA10</strong> for 10% off ✦</span>
+  </div>
+  <div class="nav-main">
+    <div class="nav-container">
+      <a class="nav-logo" href="#" onclick="showPage('home');return false" aria-label="Lustréva Home">
+        <svg width="26" height="26" viewBox="0 0 40 40" fill="none">
+          <path d="M20 3L23.5 13.5H34L25.75 19.5L29.25 30L20 24L10.75 30L14.25 19.5L6 13.5H16.5L20 3Z" fill="currentColor"/>
+        </svg>
+        <div>
+          <div class="logo-name">Lustréva</div>
+          <div class="logo-sub">Luxury Gifts</div>
+        </div>
+      </a>
+
+      <div class="nav-search-wrap">
+        <div class="nav-search" role="search">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" id="search-input" placeholder="Search gifts, occasions…" oninput="handleSearch(this.value)" onfocus="showSearchDrop()" autocomplete="off" aria-label="Search products" />
+          <button class="search-x" id="search-x" onclick="clearSearch()" style="display:none" aria-label="Clear search">✕</button>
+        </div>
+        <div class="search-dropdown" id="search-dropdown" style="display:none" role="listbox">
+          <div class="sd-title">Popular searches</div>
+          <div class="sd-pills">
+            <button onclick="quickSearch('luxury')" role="option">Luxury</button>
+            <button onclick="quickSearch('birthday')" role="option">Birthday</button>
+            <button onclick="quickSearch('anniversary')" role="option">Anniversary</button>
+            <button onclick="quickSearch('spa')" role="option">Spa</button>
+            <button onclick="quickSearch('wedding')" role="option">Wedding</button>
+          </div>
+          <div id="sd-results"></div>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <button class="nav-btn" onclick="showPage('wishlist')" title="Wishlist" aria-label="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="nav-badge" id="wl-badge" style="display:none" aria-label="wishlist items">0</span>
+        </button>
+        <button class="nav-btn" onclick="toggleCart()" title="Cart" aria-label="Shopping cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="nav-badge" id="cart-badge" style="display:none" aria-label="cart items">0</span>
+        </button>
+        <button class="nav-btn auth-nav-btn" id="auth-nav-btn" onclick="handleAuthClick()" title="Account" aria-label="Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span class="user-dot" id="user-dot" style="display:none"></span>
+        </button>
+        <button class="nav-btn theme-btn" onclick="toggleTheme()" title="Toggle theme" id="theme-btn" aria-label="Toggle dark mode">
+          <svg id="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg id="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <button class="nav-btn mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu" aria-expanded="false">
+          <svg id="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <nav class="nav-cats" id="nav-cats" aria-label="Product categories">
+    <div class="nav-cats-inner">
+      <button class="cat-btn" onclick="showAllProducts()">Shop All</button>
+      <button class="cat-btn" onclick="filterCat('her')">For Her</button>
+      <button class="cat-btn" onclick="filterCat('him')">For Him</button>
+      <button class="cat-btn" onclick="filterOcc('wedding')">Weddings</button>
+      <button class="cat-btn" onclick="filterOcc('birthday')">Birthdays</button>
+      <button class="cat-btn" onclick="filterOcc('anniversary')">Anniversaries</button>
+      <button class="cat-btn" onclick="filterCat('new')">New Arrivals</button>
+      <button class="cat-btn" onclick="filterOcc('corporate')">Corporate</button>
+    </div>
+  </nav>
+</header>
+
+<!-- User Dropdown Menu -->
+<div class="user-menu" id="user-menu" style="display:none" role="menu">
+  <div class="um-header" id="um-header">
+    <div class="um-avatar" id="um-avatar">U</div>
+    <div>
+      <div class="um-name" id="um-name">User</div>
+      <div class="um-email" id="um-email">user@email.com</div>
+    </div>
+  </div>
+  <div class="um-divider"></div>
+  <button class="um-item" id="um-admin-btn" style="display:none" onclick="showPage('admin');closeUserMenu()" role="menuitem">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2zM12 22v-6.5"/></svg>
+    Admin Panel
+  </button>
+  <button class="um-item" onclick="showPage('profile');closeUserMenu()" role="menuitem">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    My Account
+  </button>
+  <button class="um-item" onclick="showPage('wishlist');closeUserMenu()" role="menuitem">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    Wishlist
+  </button>
+  <button class="um-item" onclick="showPage('profile');setTimeout(()=>switchProfileTab('orders'),100);closeUserMenu()" role="menuitem">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+    My Orders
+  </button>
+  <div class="um-divider"></div>
+  <button class="um-item danger" onclick="logoutUser();closeUserMenu()" role="menuitem">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Sign Out
+  </button>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()" aria-hidden="true"></div>
+<aside class="cart-drawer" id="cart-drawer" role="dialog" aria-label="Shopping cart" aria-modal="true">
+  <div class="cart-hd">
+    <div class="cart-hd-left">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <h3>Your Cart</h3>
+    </div>
+    <button onclick="toggleCart()" class="drawer-close" aria-label="Close cart">✕</button>
+  </div>
+  <div class="cart-body" id="cart-body">
+    <div class="empty-cart">
+      <div class="empty-icon">🛍️</div>
+      <h4>Your cart is empty</h4>
+      <p>Add beautiful gifts to get started</p>
+      <button class="btn-primary" onclick="toggleCart();showPage('shop')">Explore Gifts</button>
+    </div>
+  </div>
+  <div class="cart-foot" id="cart-foot" style="display:none">
+    <div class="coupon-row">
+      <input type="text" id="coupon-input" placeholder="Coupon code" aria-label="Coupon code" />
+      <button onclick="applyCoupon()" class="btn-coupon">Apply</button>
+    </div>
+    <div class="cart-totals">
+      <div class="tot-row"><span>Subtotal</span><span id="c-sub">₹0</span></div>
+      <div class="tot-row"><span>Shipping</span><span class="free-ship">Free</span></div>
+      <div class="tot-row disc-row" id="disc-row" style="display:none"><span>Discount</span><span id="c-disc" class="disc-val">-₹0</span></div>
+      <div class="tot-row tot-grand"><span>Total</span><span id="c-total">₹0</span></div>
+    </div>
+    <button class="btn-primary full" onclick="goToCheckout()">🔒 Secure Checkout</button>
+    <div class="cart-trust">
+      <span>🛡 Secure</span>
+      <span>🚚 Free Delivery</span>
+      <span>↩ Easy Returns</span>
+    </div>
+  </div>
+</aside>
+
+<!-- AUTH MODAL -->
+<div class="modal-bg" id="auth-bg" onclick="closeAuth()" aria-hidden="true"></div>
+<div class="modal" id="auth-modal" role="dialog" aria-label="Sign in or register" aria-modal="true">
+  <button class="modal-x" onclick="closeAuth()" aria-label="Close">✕</button>
+  <div class="auth-brand">
+    <svg width="22" height="22" viewBox="0 0 40 40" fill="none"><path d="M20 3L23.5 13.5H34L25.75 19.5L29.25 30L20 24L10.75 30L14.25 19.5L6 13.5H16.5L20 3Z" fill="currentColor"/></svg>
+    Lustréva
+  </div>
+  <div class="auth-tabs" role="tablist">
+    <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')" role="tab" aria-selected="true">Sign In</button>
+    <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')" role="tab" aria-selected="false">Register</button>
+  </div>
+
+  <div id="form-login" role="tabpanel" aria-labelledby="tab-login">
+    <div class="fg">
+      <label for="login-email">Email Address</label>
+      <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" />
+    </div>
+    <div class="fg">
+      <label for="login-pw">Password</label>
+      <div class="pw-wrap">
+        <input type="password" id="login-pw" placeholder="Your password" autocomplete="current-password" />
+        <button type="button" onclick="togglePw('login-pw',this)" aria-label="Toggle password visibility">👁</button>
+      </div>
+    </div>
+    <button class="btn-primary full" id="login-btn" onclick="loginUser()">Sign In</button>
+    <p class="auth-switch">Don't have an account? <a onclick="switchAuthTab('register')">Create one</a></p>
+  </div>
+
+  <div id="form-register" style="display:none" role="tabpanel" aria-labelledby="tab-register">
+    <div class="fg">
+      <label for="reg-name">Full Name</label>
+      <input type="text" id="reg-name" placeholder="Your full name" autocomplete="name" />
+    </div>
+    <div class="fg">
+      <label for="reg-email">Email Address</label>
+      <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email" />
+    </div>
+    <div class="fg">
+      <label for="reg-pw">Password</label>
+      <div class="pw-wrap">
+        <input type="password" id="reg-pw" placeholder="Min 6 characters" autocomplete="new-password" />
+        <button type="button" onclick="togglePw('reg-pw',this)" aria-label="Toggle password visibility">👁</button>
+      </div>
+    </div>
+    <button class="btn-primary full" id="reg-btn" onclick="registerUser()">Create Account</button>
+    <p class="auth-switch">Already have an account? <a onclick="switchAuthTab('login')">Sign in</a></p>
+  </div>
+</div>
+
+<!-- QUICK VIEW MODAL -->
+<div class="modal-bg" id="qv-bg" onclick="closeQV()" aria-hidden="true"></div>
+<div class="modal qv-modal" id="qv-modal" role="dialog" aria-label="Quick view product" aria-modal="true">
+  <button class="modal-x" onclick="closeQV()" aria-label="Close quick view">✕</button>
+  <div id="qv-content"></div>
+</div>
+
+<!-- PAGES -->
+<main id="app">
+
+<!-- HOME PAGE -->
+<section id="page-home" class="page active">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=1600&auto=format&fit=crop" alt="Beautiful gift arrangement" loading="eager" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-eyebrow">✦ Curated Luxury Gifting</div>
+        <h1 class="hero-title">Give the Gift<br/><em>They'll Never Forget</em></h1>
+        <p class="hero-desc">Handpicked premium gifts for every occasion — beautifully wrapped and delivered with love across India.</p>
+        <div class="hero-btns">
+          <button class="btn-hero-prim" onclick="showPage('shop')">Shop Collection</button>
+          <button class="btn-hero-ghost" onclick="scrollToEl('occasions-sec')">Browse Occasions</button>
+        </div>
+        <div class="hero-stats">
+          <div class="hs"><strong>1,000+</strong><span>Happy Customers</span></div>
+          <div class="hs-div"></div>
+          <div class="hs"><strong>50+</strong><span>Premium Products</span></div>
+          <div class="hs-div"></div>
+          <div class="hs"><strong>7 Days</strong><span>Delivery</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true"><div class="scroll-line"></div><span>Scroll</span></div>
+  </div>
+
+  <!-- Features Bar -->
+  <div class="feat-bar" aria-label="Key features">
+    <div class="feat-item"><span class="feat-icon" aria-hidden="true">🎁</span><div><strong>Free Gift Wrapping</strong><span>On every order</span></div></div>
+    <div class="feat-item"><span class="feat-icon" aria-hidden="true">🚚</span><div><strong>Free Delivery</strong><span>Orders above ₹699</span></div></div>
+    <div class="feat-item"><span class="feat-icon" aria-hidden="true">🛡</span><div><strong>100% Authentic</strong><span>Quality guaranteed</span></div></div>
+    <div class="feat-item"><span class="feat-icon" aria-hidden="true">↩</span><div><strong>Easy Returns</strong><span>7-day hassle-free</span></div></div>
+  </div>
+
+  <!-- Collections -->
+  <section class="section">
+    <div class="sec-hd">
+      <div class="sec-eye">✦ Collections</div>
+      <h2 class="sec-title">Shop by Category</h2>
+    </div>
+    <div class="showcase-grid">
+      <div class="showcase-card" onclick="filterCat('her')" role="button" tabindex="0" aria-label="Browse Gifts for Her">
+        <img src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=700&h=500&fit=crop&q=80" alt="Gifts for Her" loading="lazy" />
+        <div class="showcase-info">
+          <div class="sc-tag">♡ Curated</div>
+          <h3>Gifts for Her</h3>
+          <p>Elegant &amp; Thoughtful</p>
+          <span class="sc-cta">Explore →</span>
+        </div>
+      </div>
+      <div class="showcase-card" onclick="filterCat('him')" role="button" tabindex="0" aria-label="Browse Gifts for Him">
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=700&h=500&fit=crop&q=80" alt="Gifts for Him" loading="lazy" />
+        <div class="showcase-info">
+          <div class="sc-tag">◈ Premium</div>
+          <h3>Gifts for Him</h3>
+          <p>Bold &amp; Sophisticated</p>
+          <span class="sc-cta">Explore →</span>
+        </div>
+      </div>
+      <div class="showcase-card" onclick="filterOcc('wedding')" role="button" tabindex="0" aria-label="Browse Wedding Gifts">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=700&h=500&fit=crop&q=80" alt="Wedding Gifts" loading="lazy" />
+        <div class="showcase-info">
+          <div class="sc-tag">◇ Special</div>
+          <h3>Weddings</h3>
+          <p>Celebrate Every Milestone</p>
+          <span class="sc-cta">Explore →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="section">
+    <div class="sec-hd">
+      <div class="sec-eye">✦ Handpicked</div>
+      <h2 class="sec-title">Featured Gifts</h2>
+      <p class="sec-sub">Our bestselling collections, curated for those who love to give beautifully</p>
+    </div>
+    <div class="product-grid" id="featured-grid" aria-label="Featured products"></div>
+    <div class="sec-cta"><button class="btn-outline" onclick="showPage('shop')">View All Products →</button></div>
+  </section>
+
+  <!-- Build A Box Banner -->
+  <div style="position:relative; max-width:1400px; width:calc(100% - 4rem); margin: 2rem auto 4rem; border-radius:var(--r-xl); overflow:hidden; min-height:420px; display:flex; align-items:center; padding: 4rem;">
+    <div style="position:absolute; inset:0;"><img src="https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=1400&h=600&fit=crop&q=80" style="width:100%; height:100%; object-fit:cover;" alt="Gift Box" /></div>
+    <div style="position:absolute; inset:0; background:linear-gradient(to right, rgba(26,24,20,.95) 0%, rgba(26,24,20,.7) 50%, transparent 100%);"></div>
+    <div style="position:relative; z-index:1; max-width:520px;">
+      <div class="sec-eye" style="color:var(--gold-lt);">✦ Design Your Own</div>
+      <h2 style="font-family:'Cormorant Garamond', serif; font-size:clamp(2.5rem, 5vw, 3.5rem); color:#fff; line-height:1.1; margin-bottom:1rem;">Curate the<br/>Perfect Gift Box</h2>
+      <p style="color:rgba(255,255,255,.75); font-size:1.05rem; margin-bottom:2rem; line-height:1.6;">Choose your premium packaging, select thoughtful gifts, and add a personalized note. We'll handle the rest.</p>
+      <button class="btn-light lg" onclick="showPage('shop')">Start Building →</button>
+    </div>
+  </div>
+
+  <!-- Promo Banner -->
+  <div class="promo-banner">
+    <div class="promo-bg"><img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=1600&auto=format&fit=crop" alt="Promo Background" /></div>
+    <div class="promo-content">
+      <div class="promo-eye">⏰ Limited Time</div>
+      <h2>Free Premium Gift Wrapping<br/>On Every Order This Month</h2>
+      <p>Beautifully packaged, ready to give.</p>
+      <button class="btn-light" onclick="showPage('shop')">🎁 Shop Now</button>
+    </div>
+    <div class="promo-deco" aria-hidden="true">
+      <div class="pd-ring r1"></div>
+      <div class="pd-ring r2"></div>
+      <div class="pd-center">🎁</div>
+    </div>
+  </div>
+
+  <!-- Occasions -->
+  <section class="section" id="occasions-sec">
+    <div class="sec-hd">
+      <div class="sec-eye">✦ Every Moment</div>
+      <h2 class="sec-title">Shop by Occasion</h2>
+      <p class="sec-sub">Whatever the celebration, we have the perfect gift</p>
+    </div>
+    <div class="occ-grid">
+      <div class="occ-card" onclick="filterOcc('wedding')" role="button" tabindex="0"><div class="occ-icon">💍</div><h3>Wedding</h3><p>Celebrate new beginnings</p></div>
+      <div class="occ-card" onclick="filterOcc('anniversary')" role="button" tabindex="0"><div class="occ-icon">♥</div><h3>Anniversary</h3><p>Mark every milestone</p></div>
+      <div class="occ-card" onclick="filterOcc('birthday')" role="button" tabindex="0"><div class="occ-icon">🎂</div><h3>Birthday</h3><p>Make their day magical</p></div>
+      <div class="occ-card" onclick="filterOcc('corporate')" role="button" tabindex="0"><div class="occ-icon">🏢</div><h3>Corporate</h3><p>Premium business gifting</p></div>
+      <div class="occ-card" onclick="filterOcc('housewarming')" role="button" tabindex="0"><div class="occ-icon">🏠</div><h3>Housewarming</h3><p>Warm their new home</p></div>
+      <div class="occ-card" onclick="filterOcc('festival')" role="button" tabindex="0"><div class="occ-icon">✨</div><h3>Festivals</h3><p>Diwali, Eid &amp; more</p></div>
+    </div>
+  </section>
+
+  <!-- Corporate Gifting -->
+  <section class="section" style="background:var(--bg-muted); max-width:100%; margin: 2rem 0;">
+    <div style="max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(400px, 1fr)); gap:4rem; align-items:center;">
+      <div style="border-radius:var(--r-xl); overflow:hidden; box-shadow:var(--shadow-xl); height: 500px;">
+        <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=800&auto=format&fit=crop" style="width:100%; height:100%; object-fit:cover;" alt="Corporate Gifting" />
+      </div>
+      <div>
+        <div class="sec-eye">✦ B2B Solutions</div>
+        <h2 class="sec-title">Corporate Gifting,<br/>Elevated.</h2>
+        <p class="sec-sub" style="margin:0 0 2rem 0; text-align:left; color:var(--tx2);">From elegant employee joining kits to luxurious C-suite gifts. Impress your clients and reward your team with gifts that leave a lasting impression.</p>
+        <div style="display:flex; flex-direction:column; gap:1.2rem; margin-bottom:2.5rem;">
+          <div style="display:flex; align-items:center; gap:1rem;"><span style="color:var(--gold); font-size:1.3rem;">✓</span> <span style="font-weight:500;">Custom Branding &amp; Logos</span></div>
+          <div style="display:flex; align-items:center; gap:1rem;"><span style="color:var(--gold); font-size:1.3rem;">✓</span> <span style="font-weight:500;">Bulk Order Discounts</span></div>
+          <div style="display:flex; align-items:center; gap:1rem;"><span style="color:var(--gold); font-size:1.3rem;">✓</span> <span style="font-weight:500;">Seamless Pan-India Delivery</span></div>
+        </div>
+        <button class="btn-outline" onclick="showToast('Corporate inquiry form coming soon!', 'info')">Inquire Now</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Impact -->
+  <section class="section" style="text-align:center;">
+    <div class="sec-hd" style="margin-bottom:3rem;">
+      <div class="sec-eye">✦ Purpose Driven</div>
+      <h2 class="sec-title">Gifts That Give Back</h2>
+      <p class="sec-sub">Every gift purchased from our Impact Collection directly supports our NGO partners across India.</p>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:2rem; max-width:1100px; margin:0 auto;">
+      <div style="padding:2.5rem 2rem; background:var(--bg-card); border-radius:var(--r-lg); border:1px solid var(--border-lt); transition:transform 0.3s ease; box-shadow:var(--shadow-sm);" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:3rem; margin-bottom:1.5rem;">🌱</div>
+        <h4 style="font-size:1.2rem; margin-bottom:.5rem; font-family:'Cormorant Garamond', serif; font-weight:600;">Environmental Focus</h4>
+        <p style="font-size:.9rem; color:var(--tx3); line-height:1.6;">Supporting tree plantation drives and utilizing sustainable, eco-friendly materials.</p>
+      </div>
+      <div style="padding:2.5rem 2rem; background:var(--bg-card); border-radius:var(--r-lg); border:1px solid var(--border-lt); transition:transform 0.3s ease; box-shadow:var(--shadow-sm);" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:3rem; margin-bottom:1.5rem;">🤝</div>
+        <h4 style="font-size:1.2rem; margin-bottom:.5rem; font-family:'Cormorant Garamond', serif; font-weight:600;">Empowering Artisans</h4>
+        <p style="font-size:.9rem; color:var(--tx3); line-height:1.6;">Partnering with local NGOs to provide sustainable livelihoods to underprivileged women.</p>
+      </div>
+      <div style="padding:2.5rem 2rem; background:var(--bg-card); border-radius:var(--r-lg); border:1px solid var(--border-lt); transition:transform 0.3s ease; box-shadow:var(--shadow-sm);" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="font-size:3rem; margin-bottom:1.5rem;">🍲</div>
+        <h4 style="font-size:1.2rem; margin-bottom:.5rem; font-family:'Cormorant Garamond', serif; font-weight:600;">Fighting Hunger</h4>
+        <p style="font-size:.9rem; color:var(--tx3); line-height:1.6;">Funding nutritious meals for the homeless through every specialized gift box sold.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section testi-sec">
+    <div class="sec-hd">
+      <div class="sec-eye">✦ Love Notes</div>
+      <h2 class="sec-title">What Our Customers Say</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card"><div class="testi-stars" aria-label="5 stars">★★★★★</div><p>"Absolutely stunning packaging and the most thoughtful gift I've ever given. Lustréva is my go-to for everything special."</p><div class="testi-auth"><div class="tauth-av" aria-hidden="true">P</div><div><strong>Priya Sharma</strong><span>Mumbai</span></div></div></div>
+      <div class="testi-card"><div class="testi-stars" aria-label="5 stars">★★★★★</div><p>"The anniversary gift was delivered beautifully and my wife was absolutely overjoyed. Quality exceeded expectations!"</p><div class="testi-auth"><div class="tauth-av" aria-hidden="true">R</div><div><strong>Rahul Mehra</strong><span>Delhi</span></div></div></div>
+      <div class="testi-card"><div class="testi-stars" aria-label="5 stars">★★★★★</div><p>"Ordered 3 corporate gifts and everyone loved them. The presentation is unmatched. Highly recommend!"</p><div class="testi-auth"><div class="tauth-av" aria-hidden="true">A</div><div><strong>Aditi Nair</strong><span>Bangalore</span></div></div></div>
+      <div class="testi-card"><div class="testi-stars" aria-label="5 stars">★★★★★</div><p>"Ordered the spa hamper for my mom's birthday and she couldn't stop smiling. Will definitely order again!"</p><div class="testi-auth"><div class="tauth-av" aria-hidden="true">K</div><div><strong>Kavya Reddy</strong><span>Hyderabad</span></div></div></div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="nl-section">
+    <div class="nl-inner">
+      <div class="nl-icon" aria-hidden="true">✉</div>
+      <div class="sec-eye" style="color:var(--gold-lt)">✦ Join the Circle</div>
+      <h2>Get Early Access &amp; Exclusive Offers</h2>
+      <p>Be the first to know about new collections and member-only discounts.</p>
+      <form class="nl-form" onsubmit="subscribeNL(event)" novalidate>
+        <input type="email" id="nl-email" placeholder="Enter your email address" required aria-label="Email for newsletter" />
+        <button type="submit" class="btn-primary">Subscribe</button>
+      </form>
+      <p class="nl-note">🔒 No spam. Unsubscribe anytime.</p>
+    </div>
+  </section>
+</section>
+
+<!-- SHOP PAGE -->
+<section id="page-shop" class="page">
+  <div class="pg-hero">
+    <div class="pg-hero-bg"><img src="https://images.unsplash.com/photo-1513201099705-a9746072f043?w=1200&h=300&fit=crop&q=70" alt="" aria-hidden="true" loading="lazy" /></div>
+    <div class="pg-hero-content">
+      <h1>Our Collection</h1>
+      <p>Discover gifts that truly resonate</p>
+    </div>
+  </div>
+  <div class="shop-layout">
+    <aside class="filters-bar" id="filters-bar" aria-label="Product filters">
+      <div class="flt-hd">
+        <h3>Filters</h3>
+        <button onclick="clearFilters()" class="clr-flt">Clear All</button>
+      </div>
+      <div class="flt-grp">
+        <h4>Category</h4>
+        <label><input type="checkbox" name="cat" value="her" onchange="applyFilters()" /> Gift for Her</label>
+        <label><input type="checkbox" name="cat" value="him" onchange="applyFilters()" /> Gift for Him</label>
+        <label><input type="checkbox" name="cat" value="new" onchange="applyFilters()" /> New Arrivals</label>
+      </div>
+      <div class="flt-grp">
+        <h4>Occasion</h4>
+        <label><input type="checkbox" name="occ" value="wedding" onchange="applyFilters()" /> Wedding</label>
+        <label><input type="checkbox" name="occ" value="anniversary" onchange="applyFilters()" /> Anniversary</label>
+        <label><input type="checkbox" name="occ" value="birthday" onchange="applyFilters()" /> Birthday</label>
+        <label><input type="checkbox" name="occ" value="corporate" onchange="applyFilters()" /> Corporate</label>
+        <label><input type="checkbox" name="occ" value="housewarming" onchange="applyFilters()" /> Housewarming</label>
+        <label><input type="checkbox" name="occ" value="festival" onchange="applyFilters()" /> Festival</label>
+      </div>
+      <div class="flt-grp">
+        <h4>Price Range</h4>
+        <div class="price-range">
+          <input type="range" id="price-slider" min="0" max="10000" value="10000" oninput="updatePriceLabel(this.value);applyFilters()" aria-label="Maximum price" />
+          <div class="price-lbl"><span>₹0</span><span id="price-max">₹10,000</span></div>
+        </div>
+      </div>
+      <div class="flt-grp">
+        <h4>Rating</h4>
+        <label><input type="radio" name="rating" value="4" onchange="applyFilters()" /> 4★ &amp; above</label>
+        <label><input type="radio" name="rating" value="3" onchange="applyFilters()" /> 3★ &amp; above</label>
+        <label><input type="radio" name="rating" value="0" onchange="applyFilters()" checked /> All</label>
+      </div>
+      <button class="flt-close-btn" onclick="closeFiltersPanel()">Apply Filters ✓</button>
+    </aside>
+    <div class="products-area">
+      <div class="shop-toolbar">
+        <p id="prod-count" class="prod-count" aria-live="polite">Showing all products</p>
+        <div class="sort-wrap">
+          <label for="sort-sel">Sort:</label>
+          <select id="sort-sel" onchange="applyFilters()">
+            <option value="default">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="rating">Most Popular</option>
+            <option value="newest">Newest First</option>
+          </select>
+        </div>
+        <button class="flt-toggle-btn" onclick="toggleFilters()" aria-label="Toggle filters">⚙ Filters</button>
+      </div>
+      <div class="product-grid" id="shop-grid" aria-label="Products"></div>
+      <div id="no-prods" class="empty-state" style="display:none" role="status">
+        <div aria-hidden="true">🔍</div>
+        <h4>No products found</h4>
+        <p>Try adjusting your filters</p>
+        <button class="btn-outline" onclick="clearFilters()">Clear Filters</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT DETAIL PAGE -->
+<section id="page-product" class="page">
+  <div class="breadcrumb" aria-label="Breadcrumb">
+    <span onclick="showPage('home')" tabindex="0">Home</span> ›
+    <span onclick="showPage('shop')" tabindex="0">Shop</span> ›
+    <span id="prod-bc" class="bc-cur">Product</span>
+  </div>
+  <div class="prod-detail" id="prod-detail"></div>
+  <section class="section">
+    <div class="sec-hd">
+      <div class="sec-eye">✦ Recommendations</div>
+      <h2 class="sec-title">You Might Also Like</h2>
+    </div>
+    <div class="product-grid" id="related-grid" aria-label="Related products"></div>
+  </section>
+</section>
+
+<!-- WISHLIST PAGE -->
+<section id="page-wishlist" class="page">
+  <div class="pg-hero">
+    <div class="pg-hero-content"><h1>♥ My Wishlist</h1><p>Your saved favourites</p></div>
+  </div>
+  <div class="pg-content">
+    <div class="product-grid" id="wl-grid" aria-label="Wishlist products"></div>
+    <div id="wl-empty" class="empty-state" style="display:none" role="status">
+      <div aria-hidden="true">♥</div><h4>Your wishlist is empty</h4>
+      <p>Save items you love by clicking the heart icon</p>
+      <button class="btn-primary" onclick="showPage('shop')">Explore Gifts</button>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKOUT PAGE -->
+<section id="page-checkout" class="page">
+  <div class="pg-hero"><div class="pg-hero-content"><h1>🔒 Secure Checkout</h1><p>You're almost there</p></div></div>
+  <div class="checkout-layout">
+    <div class="checkout-left">
+      <div class="co-card">
+        <h3>📍 Delivery Address</h3>
+        <div class="form-row">
+          <div class="fg"><label for="co-fname">First Name *</label><input type="text" id="co-fname" placeholder="First name" autocomplete="given-name" /></div>
+          <div class="fg"><label for="co-lname">Last Name</label><input type="text" id="co-lname" placeholder="Last name" autocomplete="family-name" /></div>
+        </div>
+        <div class="fg"><label for="co-email">Email *</label><input type="email" id="co-email" placeholder="Email address" autocomplete="email" /></div>
+        <div class="fg"><label for="co-phone">Phone *</label><input type="tel" id="co-phone" placeholder="+91 XXXXX XXXXX" autocomplete="tel" /></div>
+        <div class="fg"><label for="co-addr1">Address Line 1 *</label><input type="text" id="co-addr1" placeholder="House / Flat / Street" autocomplete="address-line1" /></div>
+        <div class="fg"><label for="co-addr2">Address Line 2</label><input type="text" id="co-addr2" placeholder="Landmark (optional)" autocomplete="address-line2" /></div>
+        <div class="form-row">
+          <div class="fg"><label for="co-city">City *</label><input type="text" id="co-city" placeholder="City" autocomplete="address-level2" /></div>
+          <div class="fg"><label for="co-pin">PIN Code *</label><input type="text" id="co-pin" placeholder="6-digit PIN" autocomplete="postal-code" maxlength="6" /></div>
+        </div>
+        <div class="fg"><label for="co-state">State</label>
+          <select id="co-state" autocomplete="address-level1">
+            <option value="">Select State</option>
+            <option>Andhra Pradesh</option><option>Assam</option><option>Bihar</option>
+            <option>Delhi</option><option>Goa</option><option>Gujarat</option>
+            <option>Haryana</option><option>Karnataka</option><option>Kerala</option>
+            <option>Madhya Pradesh</option><option>Maharashtra</option><option>Punjab</option>
+            <option>Rajasthan</option><option>Tamil Nadu</option><option>Telangana</option>
+            <option>Uttar Pradesh</option><option>West Bengal</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="co-card">
+        <h3>💳 Payment Method</h3>
+        <div class="pay-opts">
+          <label class="pay-opt">
+            <input type="radio" name="pay" value="online" checked />
+            <div class="pay-opt-inner">
+              <span class="pay-icon" aria-hidden="true">💳</span>
+              <div><strong>Pay Online</strong><small>UPI, Cards, Net Banking</small></div>
+              <span class="pay-check" aria-hidden="true">✓</span>
+            </div>
+          </label>
+          <label class="pay-opt">
+            <input type="radio" name="pay" value="cod" />
+            <div class="pay-opt-inner">
+              <span class="pay-icon" aria-hidden="true">💵</span>
+              <div><strong>Cash on Delivery</strong><small>Pay when order arrives</small></div>
+              <span class="pay-check" aria-hidden="true">✓</span>
+            </div>
+          </label>
+        </div>
+        <button class="btn-primary full lg" id="place-order-btn" onclick="placeOrder()">🔒 Place Order Securely</button>
+      </div>
+    </div>
+    <div class="checkout-right">
+      <div class="co-card sticky-sum">
+        <h3>🧾 Order Summary</h3>
+        <div id="co-items"></div>
+        <div class="co-totals">
+          <div class="tot-row"><span>Subtotal</span><span id="co-sub">₹0</span></div>
+          <div class="tot-row"><span>Shipping</span><span class="free-ship">Free</span></div>
+          <div class="tot-row disc-row" id="co-disc-row" style="display:none"><span>Discount</span><span id="co-disc" class="disc-val">-₹0</span></div>
+          <div class="tot-row tot-grand"><span>Total</span><span id="co-total">₹0</span></div>
+        </div>
+        <div class="trust-badges">
+          <span>🛡 Secure Payment</span>
+          <span>🚚 Free Delivery</span>
+          <span>↩ Easy Returns</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER SUCCESS PAGE -->
+<section id="page-success" class="page">
+  <div class="success-wrap">
+    <div class="success-anim" aria-hidden="true">
+      <div class="success-circle">✓</div>
+      <div class="success-ring r1"></div>
+      <div class="success-ring r2"></div>
+    </div>
+    <h1>Order Confirmed!</h1>
+    <p>Thank you for shopping with Lustréva. Your gift is on its way!</p>
+    <div class="success-box">
+      <div class="sb-row">📦 Order ID: <strong id="success-oid">#LV000000</strong></div>
+      <div class="sb-row">🚚 Estimated delivery: <strong>3–5 business days</strong></div>
+      <div class="sb-row">✉ Confirmation email sent to your inbox</div>
+    </div>
+    <div class="success-btns">
+      <button class="btn-primary" onclick="showPage('profile')">📦 View Order</button>
+      <button class="btn-outline" onclick="showPage('home')">← Continue Shopping</button>
+    </div>
+  </div>
+</section>
+
+<!-- PROFILE PAGE -->
+<section id="page-profile" class="page">
+  <div class="pg-hero"><div class="pg-hero-content"><h1>My Account</h1><p id="profile-greet">Welcome back!</p></div></div>
+  <div class="profile-layout">
+    <aside class="profile-sidebar">
+      <div class="profile-card">
+        <div class="profile-av" id="profile-av"><span id="profile-av-letter">U</span></div>
+        <h3 id="profile-name">User</h3>
+        <p id="profile-email">user@example.com</p>
+        <div class="member-badge">✦ Premium Member</div>
+      </div>
+      <nav class="profile-nav" aria-label="Account navigation">
+        <button class="pnav-btn active" id="pnav-orders" onclick="switchProfileTab('orders',this)">📦 My Orders</button>
+        <button class="pnav-btn" id="pnav-wishlist-tab" onclick="switchProfileTab('wishlist-tab',this)">♥ Wishlist</button>
+        <button class="pnav-btn" id="pnav-settings" onclick="switchProfileTab('settings',this)">⚙ Settings</button>
+        <button class="pnav-btn danger" onclick="logoutUser()">⟵ Sign Out</button>
+      </nav>
+    </aside>
+    <div class="profile-content">
+      <div id="ptab-orders" class="ptab active">
+        <h3>📦 My Orders</h3>
+        <div id="orders-list"></div>
+      </div>
+      <div id="ptab-wishlist-tab" class="ptab">
+        <h3>♥ Saved Items</h3>
+        <div class="product-grid" id="profile-wl"></div>
+      </div>
+      <div id="ptab-settings" class="ptab">
+        <h3>⚙ Account Settings</h3>
+        <div class="settings-form">
+          <div class="fg"><label for="set-name">Display Name</label><input type="text" id="set-name" placeholder="Your name" /></div>
+          <div class="fg"><label for="set-email">Email</label><input type="email" id="set-email" disabled aria-disabled="true" /></div>
+          <button class="btn-primary" onclick="updateProfile()">💾 Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN PAGE -->
+<section id="page-admin" class="page">
+  <div class="pg-hero"><div class="pg-hero-content"><h1>⚙ Admin Dashboard</h1><p>Manage products, orders, and customers</p></div></div>
+  <div class="admin-layout">
+    <div class="admin-stats" aria-label="Store statistics">
+      <div class="stat-card"><div class="stat-icon" aria-hidden="true">📦</div><h3 id="st-products">0</h3><p>Products</p></div>
+      <div class="stat-card"><div class="stat-icon" aria-hidden="true">🛍</div><h3 id="st-orders">0</h3><p>Orders</p></div>
+      <div class="stat-card"><div class="stat-icon" aria-hidden="true">👥</div><h3 id="st-users">0</h3><p>Customers</p></div>
+      <div class="stat-card"><div class="stat-icon" aria-hidden="true">₹</div><h3 id="st-rev">₹0</h3><p>Revenue</p></div>
+    </div>
+
+    <!-- Admin Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" id="adm-tab-products" onclick="switchAdminTab('products',this)">📦 Products</button>
+      <button class="admin-tab" id="adm-tab-orders" onclick="switchAdminTab('orders',this)">🛍 Orders</button>
+      <button class="admin-tab" id="adm-tab-customers" onclick="switchAdminTab('customers',this)">👥 Customers</button>
+    </div>
+
+    <!-- Products Tab -->
+    <div id="adm-panel-products" class="adm-panel active">
+      <div class="admin-form-card">
+        <h3>➕ Add / Edit Product</h3>
+        <input type="hidden" id="adm-id" />
+        <div class="form-row">
+          <div class="fg"><label for="adm-title">Title *</label><input type="text" id="adm-title" placeholder="Product name" /></div>
+          <div class="fg"><label for="adm-price">Price (₹) *</label><input type="number" id="adm-price" placeholder="0" min="0" /></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label for="adm-orig">Original Price (₹)</label><input type="number" id="adm-orig" placeholder="Leave blank if no sale" min="0" /></div>
+          <div class="fg"><label for="adm-rating">Rating (1–5)</label><input type="number" id="adm-rating" min="1" max="5" step="0.1" placeholder="4.5" /></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label for="adm-cat">Category</label><select id="adm-cat"><option value="her">Gift for Her</option><option value="him">Gift for Him</option><option value="new">New Arrivals</option></select></div>
+          <div class="fg"><label for="adm-occ">Occasion</label><select id="adm-occ"><option value="birthday">Birthday</option><option value="anniversary">Anniversary</option><option value="wedding">Wedding</option><option value="corporate">Corporate</option><option value="housewarming">Housewarming</option><option value="festival">Festival</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label for="adm-stock">Stock</label><input type="number" id="adm-stock" placeholder="100" min="0" /></div>
+          <div class="fg"><label for="adm-reviews">Reviews Count</label><input type="number" id="adm-reviews" placeholder="0" min="0" /></div>
+        </div>
+        <div class="fg"><label for="adm-desc">Description *</label><textarea id="adm-desc" rows="3" placeholder="Description…"></textarea></div>
+        <div class="fg"><label for="adm-img">Image URL</label><input type="url" id="adm-img" placeholder="https://…" oninput="adminPreviewImage()" /><div class="adm-img-preview-wrap"><div class="adm-img-preview" id="adm-img-preview">No image</div></div></div>
+        <div class="fg"><label for="adm-tags">Tags (comma separated)</label><input type="text" id="adm-tags" placeholder="luxury, floral, for-her" /></div>
+        <div class="fg adm-new-wrap"><label><input type="checkbox" id="adm-isnew" /> Mark as New Arrival</label></div>
+        <div class="adm-btns">
+          <button class="btn-primary" onclick="adminSave()">💾 Save Product</button>
+          <button class="btn-outline" onclick="adminClear()">✕ Clear</button>
+        </div>
+      </div>
+      <div class="admin-form-card">
+        <h3>📋 All Products (<span id="adm-prod-count">0</span>)</h3>
+        <div id="admin-prod-list"></div>
+      </div>
+    </div>
+
+    <!-- Orders Tab -->
+    <div id="adm-panel-orders" class="adm-panel">
+      <div class="admin-form-card">
+        <h3>🛍 All Orders</h3>
+        <div id="admin-orders-list"></div>
+      </div>
+    </div>
+
+    <!-- Customers Tab -->
+    <div id="adm-panel-customers" class="adm-panel">
+      <div class="admin-form-card">
+        <h3>👥 All Customers</h3>
+        <div id="admin-customers-list"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- INFO: Track Order -->
+<section id="page-track" class="page">
+  <div class="pg-hero"><div class="pg-hero-content"><h1>📦 Track Your Order</h1><p>Stay updated on your delivery</p></div></div>
+  <div class="info-page">
+    <h2>Track Order</h2>
+    <p>To track your order, please sign in to your account and visit the <strong>My Orders</strong> section in your profile. You'll find real-time status updates for all your orders.</p>
+    <h3>Order Statuses</h3>
+    <ul>
+      <li><strong>Pending</strong> — Your order has been received and is being processed.</li>
+      <li><strong>Confirmed</strong> — Your order has been confirmed and is being prepared.</li>
+      <li><strong>Shipped</strong> — Your order is on its way! You will receive tracking details via email.</li>
+      <li><strong>Delivered</strong> — Your order has been delivered successfully.</li>
+    </ul>
+    <p>For any queries about your order, please <a style="color:var(--gold);cursor:pointer" onclick="showPage('contact')">contact our support team</a>.</p>
+    <button class="btn-primary" onclick="showPage('profile')">Go to My Orders</button>
+  </div>
+</section>
+
+<!-- INFO: Returns Policy -->
+<section id="page-returns" class="page">
+  <div class="pg-hero"><div class="pg-hero-content"><h1>↩ Returns Policy</h1><p>Hassle-free returns within 7 days</p></div></div>
+  <div class="info-page">
+    <h2>Returns & Refund Policy</h2>
+    <p>At Lustréva, your satisfaction is our priority. If you're not completely happy with your purchase, we're here to help.</p>
+    <h3>Return Window</h3>
+    <p>You may request a return within <strong>7 days</strong> of delivery. Items must be unused, in original packaging, and in the same condition as received.</p>
+    <h3>Non-Returnable Items</h3>
+    <ul>
+      <li>Personalised or custom-engraved products</li>
+      <li>Food and perishable items (chocolates, dry fruits, etc.)</li>
+      <li>Gift cards and vouchers</li>
+      <li>Items marked as "Final Sale"</li>
+    </ul>
+    <h3>How to Initiate a Return</h3>
+    <ul>
+      <li>Email us at <strong>returns@lustreva.in</strong> with your Order ID</li>
+      <li>Our team will arrange a pickup within 2–3 business days</li>
+      <li>Refund will be processed within 5–7 business days after inspection</li>
+    </ul>
+    <h3>Refund Method</h3>
+    <p>Refunds are credited to the original payment method. For COD orders, we will initiate a bank transfer.</p>
+  </div>
+</section>
+
+<!-- INFO: Gift Wrapping -->
+<section id="page-giftwrap" class="page">
+  <div class="pg-hero"><div class="pg-hero-content"><h1>🎁 Gift Wrapping</h1><p>Premium packaging for every occasion</p></div></div>
+  <div class="info-page">
+    <h2>Our Gift Wrapping Service</h2>
+    <p>Every Lustréva order arrives beautifully packaged. But for that extra touch of luxury, we offer our <strong>Premium Gift Wrapping</strong> service.</p>
+    <h3>What's Included</h3>
+    <ul>
+      <li>Signature Lustréva gift box with magnetic closure</li>
+      <li>Hand-tied satin ribbon in gold or ivory</li>
+      <li>Dried flower accent and tissue paper layering</li>
+      <li>Personalised handwritten greeting card</li>
+    </ul>
+    <h3>Pricing</h3>
+    <p><strong>Free</strong> on all orders this month! Regular price: ₹149 per gift box.</p>
+    <h3>Add a Personal Note</h3>
+    <p>During checkout, you can add a custom message that will be handwritten on our premium card stock and tucked into the gift box.</p>
+    <button class="btn-primary" onclick="showPage('shop')">Shop Now</button>
+  </div>
+</section>
+
+<!-- INFO: Contact Us -->
+<section id="page-contact" class="page">
+  <div class="pg-hero"><div class="pg-hero-content"><h1>📞 Contact Us</h1><p>We'd love to hear from you</p></div></div>
+  <div class="info-page">
+    <h2>Get in Touch</h2>
+    <p>Have a question, suggestion, or need help with an order? Our team is here for you.</p>
+    <div class="contact-grid">
+      <div class="contact-card"><div class="contact-icon">📧</div><h4>Email</h4><p>support@lustreva.in</p></div>
+      <div class="contact-card"><div class="contact-icon">📞</div><h4>Phone</h4><p>+91 98765 43210</p></div>
+      <div class="contact-card"><div class="contact-icon">⏰</div><h4>Hours</h4><p>Mon–Sat, 10am–7pm IST</p></div>
+    </div>
+    <h3>Corporate Inquiries</h3>
+    <p>For bulk orders, custom branding, and corporate partnerships, email us at <strong>corporate@lustreva.in</strong> or call our dedicated line.</p>
+    <h3>Visit Us</h3>
+    <p>Lustréva HQ<br/>42, Brigade Road, Indiranagar<br/>Bangalore, Karnataka 560038</p>
+  </div>
+</section>
+
+<!-- INFO: About Us -->
+<section id="page-about" class="page">
+  <div class="pg-hero"><div class="pg-hero-content"><h1>✦ About Lustréva</h1><p>Our story of thoughtful gifting</p></div></div>
+  <div class="info-page">
+    <h2>Our Story</h2>
+    <p>Lustréva was born from a simple idea: gifting should be <em>effortless, elegant, and meaningful</em>. Founded in 2023, we set out to create India's most thoughtful gifting platform — one that combines artisan craftsmanship with modern convenience.</p>
+    <h3>Our Mission</h3>
+    <p>To transform every occasion into a memorable experience through curated, premium gifts that speak louder than words. We believe the right gift, presented beautifully, can strengthen any relationship.</p>
+    <h3>What Sets Us Apart</h3>
+    <ul>
+      <li><strong>Curated Collections</strong> — Every product is handpicked by our gifting experts</li>
+      <li><strong>Artisan Quality</strong> — We partner with local artisans and premium brands</li>
+      <li><strong>Stunning Packaging</strong> — Unboxing is part of the experience</li>
+      <li><strong>Pan-India Delivery</strong> — We deliver to every corner of India</li>
+      <li><strong>Purpose-Driven</strong> — A portion of every sale supports NGO partners</li>
+    </ul>
+    <h3>The Team</h3>
+    <p>We're a passionate team of designers, curators, and gifting enthusiasts based in Bangalore. We obsess over every detail — from the ribbon on the box to the smile on the recipient's face.</p>
+  </div>
+</section>
+
+<!-- INFO: Careers -->
+<section id="page-careers" class="page">
+  <div class="pg-hero"><div class="pg-hero-content"><h1>💼 Careers</h1><p>Join the Lustréva team</p></div></div>
+  <div class="info-page">
+    <h2>Work With Us</h2>
+    <p>We're always looking for talented, passionate people to join our growing team. At Lustréva, you'll work in a creative, fast-paced environment where your ideas matter.</p>
+    <h3>Open Positions</h3>
+    <ul>
+      <li><strong>Product Curator</strong> — Research and source premium gifting products (Bangalore)</li>
+      <li><strong>Frontend Developer</strong> — Build beautiful, responsive web experiences (Remote)</li>
+      <li><strong>Social Media Manager</strong> — Grow our brand presence on Instagram & Pinterest (Bangalore)</li>
+      <li><strong>Operations Associate</strong> — Manage logistics and delivery partnerships (Bangalore)</li>
+    </ul>
+    <h3>Why Lustréva?</h3>
+    <ul>
+      <li>Flexible work culture with hybrid options</li>
+      <li>Employee discount on all Lustréva products</li>
+      <li>Health insurance and wellness benefits</li>
+      <li>Growth-oriented culture with quarterly learning budgets</li>
+    </ul>
+    <p>Send your resume to <strong>careers@lustreva.in</strong> with the role in the subject line.</p>
+  </div>
+</section>
+
+<!-- INFO: Privacy Policy -->
+<section id="page-privacy" class="page">
+  <div class="pg-hero"><div class="pg-hero-content"><h1>🔒 Privacy Policy</h1><p>How we protect your data</p></div></div>
+  <div class="info-page">
+    <h2>Privacy Policy</h2>
+    <p><em>Last updated: May 2026</em></p>
+    <h3>Information We Collect</h3>
+    <p>When you use Lustréva, we collect information you provide directly: name, email address, shipping address, and payment details. We also collect usage data such as pages visited and products viewed.</p>
+    <h3>How We Use Your Information</h3>
+    <ul>
+      <li>To process and deliver your orders</li>
+      <li>To send order confirmation and shipping updates</li>
+      <li>To improve our products and website experience</li>
+      <li>To send promotional offers (with your consent)</li>
+    </ul>
+    <h3>Data Security</h3>
+    <p>We implement industry-standard security measures including SSL encryption and secure payment processing. We never store your full payment card details.</p>
+    <h3>Third-Party Sharing</h3>
+    <p>We do not sell your personal data. We share information only with logistics partners (for delivery) and payment processors (for transactions).</p>
+    <h3>Your Rights</h3>
+    <p>You can request access to, correction of, or deletion of your personal data at any time by emailing <strong>privacy@lustreva.in</strong>.</p>
+  </div>
+</section>
+
+<!-- INFO: Terms -->
+<section id="page-terms" class="page">
+  <div class="pg-hero"><div class="pg-hero-content"><h1>📜 Terms & Conditions</h1><p>Rules governing your use of our platform</p></div></div>
+  <div class="info-page">
+    <h2>Terms & Conditions</h2>
+    <p><em>Last updated: May 2026</em></p>
+    <h3>General</h3>
+    <p>By using Lustréva's website and services, you agree to these terms. If you disagree with any part, please discontinue use.</p>
+    <h3>Orders & Pricing</h3>
+    <ul>
+      <li>All prices are in Indian Rupees (₹) and inclusive of applicable taxes</li>
+      <li>We reserve the right to modify prices without prior notice</li>
+      <li>Orders are subject to availability and confirmation</li>
+    </ul>
+    <h3>Payment</h3>
+    <p>We accept UPI, Net Banking, Credit/Debit Cards, and Cash on Delivery. Online payments are processed securely via our payment gateway partners.</p>
+    <h3>Delivery</h3>
+    <ul>
+      <li>Standard delivery: 5–7 business days</li>
+      <li>Express delivery: 2–3 business days (select cities)</li>
+      <li>Free shipping on all orders above ₹999</li>
+    </ul>
+    <h3>Intellectual Property</h3>
+    <p>All content on this website — including logos, images, text, and designs — is the property of Lustréva and may not be reproduced without written permission.</p>
+    <h3>Dispute Resolution</h3>
+    <p>Any disputes shall be governed by the laws of India and subject to the exclusive jurisdiction of courts in Bangalore, Karnataka.</p>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <svg width="18" height="18" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 3L23.5 13.5H34L25.75 19.5L29.25 30L20 24L10.75 30L14.25 19.5L6 13.5H16.5L20 3Z" fill="currentColor"/></svg>
+        Lustréva
+      </div>
+      <p>Premium gifting for every occasion. Crafted with love, delivered with care across India.</p>
+      <div class="social-links">
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📸</a>
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">👤</a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">🐦</a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="fl-col"><h4>Shop</h4><ul>
+        <li><a onclick="filterCat('her')">Gift for Her</a></li>
+        <li><a onclick="filterCat('him')">Gift for Him</a></li>
+        <li><a onclick="filterCat('new')">New Arrivals</a></li>
+        <li><a onclick="showAllProducts()">All Products</a></li>
+      </ul></div>
+      <div class="fl-col"><h4>Occasions</h4><ul>
+        <li><a onclick="filterOcc('wedding')">Wedding</a></li>
+        <li><a onclick="filterOcc('birthday')">Birthday</a></li>
+        <li><a onclick="filterOcc('anniversary')">Anniversary</a></li>
+        <li><a onclick="filterOcc('corporate')">Corporate</a></li>
+      </ul></div>
+      <div class="fl-col"><h4>Help</h4><ul>
+        <li><a onclick="showPage('track')">Track Order</a></li>
+        <li><a onclick="showPage('returns')">Returns Policy</a></li>
+        <li><a onclick="showPage('giftwrap')">Gift Wrapping</a></li>
+        <li><a onclick="showPage('contact')">Contact Us</a></li>
+      </ul></div>
+      <div class="fl-col"><h4>Company</h4><ul>
+        <li><a onclick="showPage('about')">About Us</a></li>
+        <li><a onclick="showPage('careers')">Careers</a></li>
+        <li><a onclick="showPage('privacy')">Privacy Policy</a></li>
+        <li><a onclick="showPage('terms')">Terms</a></li>
+      </ul></div>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <p>© 2026 Lustréva. All rights reserved. Made with ♥ in India.</p>
+    <div class="footer-pay">💳 UPI &nbsp;🏦 Net Banking &nbsp;🛡 SSL Secure</div>
+  </div>
+</footer>
+
+<!-- Filter overlay for mobile -->
+<div class="filter-overlay" id="filter-overlay" onclick="closeFiltersPanel()"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
