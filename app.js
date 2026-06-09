@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderFeatured();
   updateBadges();
   initGlobalListeners();
-  await loadFirebase();
+  console.info('Running in template demo mode');
 });
 
 function initLoader() {
